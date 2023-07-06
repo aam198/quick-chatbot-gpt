@@ -23,7 +23,9 @@ main {
 }
 
 h1{
+  grid-area: title;
   font-size: 1rem;
+  color: #fcfcfc;
 }
 
 h2, p {
@@ -41,8 +43,9 @@ h2{
 
 .chatbot-container{
   background-color: #16202C;
-  width: 32rem;
-  min-height: 35rem;
+  /* width: 32rem; */
+  width: 360px;
+  min-height: 380px;
   border-radius: var(--border-rad-lg);
   display: flex;
   flex-direction: column;
@@ -53,11 +56,11 @@ h2{
   padding: .5em;
 }
 
-.chatbot-header{
+.chatbot-header {
   display: grid;
-  grid-template-areas: 'logo ..'
-                        'logo title supportId'
-                        'logo subtitle .';
+  grid-template-areas: 'logo . .' 
+                      'logo title supportId'
+                      'logo subtitle .';
 }
 
 .chatbot-header > * {
@@ -70,14 +73,14 @@ h2{
 }
 
 .supportId {
-  font-size: 1rem;
+  font-size: 10px;
   grid-area: supportId;
   text-align: right;
 }
 
 .chatbot-conversation-container{
-  max-height: 25rem;
-  min-might: 250rem;
+  max-height: 20rem;
+  min-height: 20rem;
   overflow-y: scroll;
   margin: 1em 0;
 }
@@ -93,9 +96,9 @@ h2{
 
 
 .speech {
-  padding: 1rem;
-  margin: 1rem auto;
-  max-width: 26rem;
+  padding: 1em;
+  margin: 1em auto;
+  max-width: 260px;
   color: var(--light-text);
   min-width: 100%;
   border-radius: var(--border-rad-lg);
@@ -145,3 +148,20 @@ button{
   display: block;
 }
 
+/* Cursor */
+
+@keyframes cursor-blink {
+  0% {
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.blink-cursor::after{
+  content: "|";
+  font-weight: 700;
+  display: inline-block;
+  animation: cursor-blink .5s steps(2) infinite;
+}
