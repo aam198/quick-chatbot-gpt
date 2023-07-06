@@ -110,3 +110,23 @@ input[type="text"], button {
   border-radius: 1rem;
   padding: 1em;
 }
+
+input[type="text"]{
+  color: #fcfcfc;
+  width: 100%;
+  border-right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+button{
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.send-btn-icon {
+  width: 20px;
+  display: block;
+}
+
