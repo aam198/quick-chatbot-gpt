@@ -25,11 +25,18 @@ app.post("/ask", async (req, res) => {
     if (prompt == null) {
       throw new Error("Uh oh, no prompt was provided");
     }
-    // return the result
+   // trigger OpenAI completion
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt,
+    });
+    // retrieve the completion text from response
+    const completion = response.data.choices[0].text;
+    // returned in successful response of /ask request
     return res.status(200).json({
       success: true,
-      message: prompt,
-    });
+      message: completion,
+    })
   } catch (error) {
     console.log(error.message);
   }
