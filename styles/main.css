@@ -22,6 +22,21 @@ main {
   justify-content: center;
 }
 
+h1{
+  font-size: 1rem;
+}
+
+h2, p {
+  color: var(--medium-light-text);
+}
+
+h2{
+  font-size: 0.8rem;
+  font-weight: 700;
+  grid-area: subtitle;
+  text-transform: uppercase;
+}
+
 /* chatbot elements */
 
 .chatbot-container{
