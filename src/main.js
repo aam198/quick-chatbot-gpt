@@ -1,2 +1,3 @@
-import { process } from '/env.js'
+import { process } from '../env'
 
+console.log(process);
