@@ -12,6 +12,10 @@ const conversationArr = [
 
 document.addEventListener('submit', (e) => {
   e.preventDefault();
+  document.getElementById("send-icon").style.transform="scale(1.2)";
+  setTimeout(() => {
+    document.getElementById("send-icon").style.transform="scale(1)";
+  },300);
   // get text input field from user
   const userInput = document.getElementById('user-input');
   // create new div

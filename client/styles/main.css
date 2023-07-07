@@ -135,18 +135,35 @@ input[type="text"]{
   border-right: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  transition: border 0.2s ease-in;
+}
+
+input[type="text"]:focus-visible{
+  outline: none;
+} 
+
+#user-input:focus-visible{
+  border: 1px solid #798BA0;
 }
 
 button{
+  cursor: pointer;
   border-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
 .send-btn-icon {
+  color: var(--light-text);
   width: 20px;
   display: block;
+  transition: scale 0.2s ease-in-out;
 }
+
+.send-btn-icon:hover{
+  scale: 1.2;
+}
+
 
 /* Cursor */
 
