@@ -1,50 +1,68 @@
-
+const userInputForm = document.getElementById('user-input-form');
+const userInputInput = document.getElementById('user-input');
 const chatbotConversation = document.getElementById('chatbot-conversation'); 
 
-const conversationArr = [
-  {
-    role: 'system',
-    content: 'You are useful assistance.' //this is the instruction
-  }
-];
+const addSpeechBubble = (role, content) => {
+  const newSpeechBubble = document.createElement('div');
+  newSpeechBubble.classList.add('speech', `speech-${role}`);
+  newSpeechBubble.textContent = content;
+  chatbotConversation.appendChild(newSpeechBubble);
+};
 
-const convoSend = async(conversationArr) => {
-  const url = `/ask?${conversationArr}`
-  const res = await fetch(url)
-  const data = await res.json()
+const scrollToBottom = () => {
+  chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
+};
 
-  console.log(data);
-}
+const fetchConversation = () => {
+  fetch('/api/conversation')
+    .then((response) => response.json())
+    .then((data) => {
+      data.forEach((speechBubble) => {
+        addSpeechBubble(speechBubble.role, speechBubble.content);
+      });
 
-document.addEventListener('submit', (e) => {
+      scrollToBottom();
+    })
+    .catch((error) => {
+      console.error('Error fetching conversation:', error);
+    });
+};
+
+const sendUserInput = (input) => {
+  fetch('/api/conversation', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userInput: input }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      addSpeechBubble('user', input);
+      addSpeechBubble('assistant', data.response);
+      scrollToBottom();
+    })
+    .catch((error) => {
+      console.error('Error sending user input:', error);
+    });
+};
+
+
+userInputForm.addEventListener('submit', (e) => {
   e.preventDefault();
   document.getElementById("send-icon").style.transform="scale(1.2)";
   setTimeout(() => {
     document.getElementById("send-icon").style.transform="scale(1)";
   },300);
-  // get text input field from user
-  const userInput = document.getElementById('user-input');
-  // create new div
-  const newSpeechBubble = document.createElement('div');
-  // assign CSS class to it
-  newSpeechBubble.classList.add('speech', 'speech-human');
-  // append speech bubble to conversation
-  chatbotConversation.appendChild(newSpeechBubble);
-  // add the user's input text to the speech bubble
-  newSpeechBubble.textContent = userInput.value;
+  
 
-  // push object to conversationArr, with role and content assigned
-  conversationArr.push({
-    role: 'user',
-    content: userInput.value,
-  })
-  convoSend(conversationArr);
-  console.log(conversationArr);
-  // Clear user input
-  userInput.value =' ';
-  // scroll to the bottom
-  chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
+  const userInput = userInputInput.value.trim();
+
+  if (userInput !== '') {
+    sendUserInput(userInput);
+    userInputInput.value = '';
+  }
+
 });
 
-console.log(conversationArr.length);
-
+fetchConversation();

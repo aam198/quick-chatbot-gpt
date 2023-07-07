@@ -4,8 +4,9 @@ const { Configuration, OpenAIApi } = require('openai');
 
 const port = process.env.PORT || 3000;
 const app = express();
-app.use(express.static('public'))
 
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 
 const configuration = new Configuration({
@@ -15,31 +16,48 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 
+const conversationArr = [
+  {
+    role: 'system',
+    content: 'You are useful assistance.' //this is the instruction
+  }
+];
+
+app.get('/api/conversation', (req, res) => {
+  res.json(conversationArr);
+});
 
 // POST request endpoint
-app.post("/ask", async (req, res) => {
+app.post('/api/conversation', (req, res) => {
   // getting prompt question from request
-  const prompt = req.body.prompt;
+  const { prompt } = req.body;
 
-  try {
-    if (prompt == null) {
-      throw new Error("Uh oh, no prompt was provided");
-    }
-   // trigger OpenAI completion
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt,
-    });
-    // retrieve the completion text from response
-    const completion = response.data.choices[0].text;
-    // returned in successful response of /ask request
-    return res.status(200).json({
-      success: true,
-      message: completion,
+  const newSpeechBubble = {
+    role: 'user',
+    content: userInput,
+  };
+
+  conversationArr.push(newSpeechBubble);
+  openai.chat
+    .create({
+      messages: conversationArr,
     })
-  } catch (error) {
-    console.log(error.message);
-  }
+    .then((response) => {
+      const chatResponse = response.data.choices[0].message.content;
+
+      const chatBubble = {
+        role: 'assistant',
+        content: chatResponse,
+      };
+
+      conversationArr.push(chatBubble);
+
+      res.json({ response: chatResponse });
+    })
+    .catch((error) => {
+      console.error('OpenAI API error:', error);
+      res.status(500).json({ error: 'An error occurred' });
+    });
 });
 
 app.listen(port, () => console.log(`Server is running on port ${port}!!`));
