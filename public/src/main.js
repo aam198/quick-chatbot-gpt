@@ -8,7 +8,13 @@ const conversationArr = [
   }
 ];
 
+const convoSend = async(conversationArr) => {
+  const url = `/ask?${conversationArr}`
+  const res = await fetch(url)
+  const data = await res.json()
 
+  console.log(data);
+}
 
 document.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -32,6 +38,7 @@ document.addEventListener('submit', (e) => {
     role: 'user',
     content: userInput.value,
   })
+  convoSend(conversationArr);
   console.log(conversationArr);
   // Clear user input
   userInput.value =' ';
