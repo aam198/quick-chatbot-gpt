@@ -1,12 +1,39 @@
-const { Configuration, OpenAIApi } = require("openai");
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+const chatbotConversation = document.getElementById('chatbot-conversation'); 
 
-const chatCompletion = await openai.createChatCompletion({
-  model: "gpt-3.5-turbo",
-  messages: [{role: "user", content: "Hello world"}],
+const conversationArr = [
+  {
+    role: 'system',
+    content: 'You are useful assistance.' //this is the instruction
+  }
+];
+
+
+
+document.addEventListener('submit', (e) => {
+  e.preventDefault();
+  // get text input field from user
+  const userInput = document.getElementById('user-input');
+  // create new div
+  const newSpeechBubble = document.createElement('div');
+  // assign CSS class to it
+  newSpeechBubble.classList.add('speech', 'speech-human');
+  // append speech bubble to conversation
+  chatbotConversation.appendChild(newSpeechBubble);
+  // add the user's input text to the speech bubble
+  newSpeechBubble.textContent = userInput.value;
+
+  // push object to conversationArr, with role and content assigned
+  conversationArr.push({
+    role: 'user',
+    content: userInput.value,
+  })
+  console.log(conversationArr);
+  // Clear user input
+  userInput.value =' ';
+  // scroll to the bottom
+  chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
 });
-console.log(chatCompletion.data.choices[0].message);
+
+console.log(conversationArr.length);
+
