@@ -1,5 +1,5 @@
 const userInputForm = document.getElementById('user-input-form');
-const userInputInput = document.getElementById('user-input');
+const userInputText = document.getElementById('user-input');
 const chatbotConversation = document.getElementById('chatbot-conversation'); 
 
 const addSpeechBubble = (role, content) => {
@@ -13,47 +13,7 @@ const scrollToBottom = () => {
   chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
 };
 
-const fetchConversation = () => {
-  fetch('/api/conversation')
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((speechBubble) => {
-        addSpeechBubble(speechBubble.role, speechBubble.content);
-      });
-
-      scrollToBottom();
-    })
-    .catch((error) => {
-      console.error('Error fetching conversation:', error);
-    });
-};
-
-const sendUserInput = (userInput) => {
-  fetch('/api/conversation', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(userInput),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // addSpeechBubble('user', input);
-      addSpeechBubble('assistant', data.response);
-      scrollToBottom();
-    })
-    .catch((error) => {
-      console.error('Error sending user input:', error);
-    });
-};
-
-
-userInputForm.addEventListener('submit', (e) => {
+userInputForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   document.getElementById("send-icon").style.transform="scale(1.2)";
   setTimeout(() => {
@@ -61,13 +21,29 @@ userInputForm.addEventListener('submit', (e) => {
   },300);
   
 
-  const userInput = userInputInput.value.trim();
+  const prompt = userInputText.value.trim();
 
-  if (userInput !== '') {
-    sendUserInput(userInput);
-    userInputInput.value = '';
+  if (prompt !== '') {
+    userInputText.value = '';
+  }
+
+  try{
+    const response = await fetch('/api/conversation', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify({ prompt })
+    });
+
+    const data = await response.json();
+    addSpeechBubble('assistant', data.message);
+    scrollToBottom();
+    
+    chatbotConversation.textContent = data.message;
+  } catch (error) {
+    console.error('Error: ', error.message);
   }
 
 });
 
-fetchConversation();
