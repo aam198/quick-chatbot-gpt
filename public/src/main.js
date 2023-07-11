@@ -25,6 +25,7 @@ userInputForm.addEventListener('submit', async (e) => {
 
   if (prompt !== '') {
     userInputText.value = '';
+    addSpeechBubble('human', prompt);
   }
 
   try{
@@ -37,10 +38,10 @@ userInputForm.addEventListener('submit', async (e) => {
     });
 
     const data = await response.json();
-    addSpeechBubble('assistant', data.message);
+    addSpeechBubble('ai', data.message);
     scrollToBottom();
     
-    chatbotConversation.textContent = data.message;
+    // chatbotConversation.textContent = data.message;
   } catch (error) {
     console.error('Error: ', error.message);
   }
