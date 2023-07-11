@@ -28,17 +28,22 @@ const fetchConversation = () => {
     });
 };
 
-const sendUserInput = (input) => {
+const sendUserInput = (userInput) => {
   fetch('/api/conversation', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(input),
+    body: JSON.stringify(userInput),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((data) => {
-      addSpeechBubble('user', input);
+      // addSpeechBubble('user', input);
       addSpeechBubble('assistant', data.response);
       scrollToBottom();
     })
