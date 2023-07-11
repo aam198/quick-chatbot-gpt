@@ -2,6 +2,15 @@ const userInputForm = document.getElementById('user-input-form');
 const userInputText = document.getElementById('user-input');
 const chatbotConversation = document.getElementById('chatbot-conversation'); 
 
+
+// Storing objects
+const conversationArr = [
+  {
+    role: 'system',
+    content: 'You are a useful assistant.'
+  }
+]
+
 const addSpeechBubble = (role, content) => {
   const newSpeechBubble = document.createElement('div');
   newSpeechBubble.classList.add('speech', `speech-${role}`);
@@ -23,6 +32,12 @@ userInputForm.addEventListener('submit', async (e) => {
 
   const prompt = userInputText.value.trim();
 
+  conversationArr.push({
+    role: 'user',
+    content: prompt
+  })
+  console.log(conversationArr);
+
   if (prompt !== '') {
     userInputText.value = '';
     addSpeechBubble('human', prompt);
@@ -38,6 +53,7 @@ userInputForm.addEventListener('submit', async (e) => {
     });
 
     const data = await response.json();
+    console.log(data);
     addSpeechBubble('ai', data.message);
     scrollToBottom();
     
