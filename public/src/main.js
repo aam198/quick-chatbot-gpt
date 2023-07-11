@@ -34,7 +34,7 @@ const sendUserInput = (input) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userInput: input }),
+    body: JSON.stringify(input),
   })
     .then((response) => response.json())
     .then((data) => {
