@@ -55,6 +55,11 @@ userInputForm.addEventListener('submit', async (e) => {
     const data = await response.json();
     console.log(data);
     addSpeechBubble('ai', data.message);
+    conversationArr.push({
+      role: 'assistant',
+      content: data.message
+    })
+    console.log('getting data back and adding to array', conversationArr);
     scrollToBottom();
     
     // chatbotConversation.textContent = data.message;
