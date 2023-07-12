@@ -31,7 +31,6 @@ app.get('/api/conversation', (req, res) => {
 app.post('/api/conversation', async (req, res) => {
   // getting prompt question from request
   const prompt = req.body.prompt;
-  console.log('this is the req.body.promp', req.body.prompt)
   conversationArr.push({
     role: 'user',
     content: prompt
