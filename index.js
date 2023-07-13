@@ -29,13 +29,13 @@ app.get('/api/conversation', (req, res) => {
 });
 // POST request endpoint
 app.post('/api/conversation', async (req, res) => {
-  // getting prompt question from request
+  // getting prompt question from request and adding to array
   const prompt = req.body.prompt;
   conversationArr.push({
     role: 'user',
     content: prompt
   })
-  console.log(conversationArr);
+  console.log('getting sent as request', conversationArr);
 
   try {
     if (prompt == null) {
@@ -49,6 +49,11 @@ app.post('/api/conversation', async (req, res) => {
     // retrieve the completion text from response
     console.log(response.data);
     const completion = response.data.choices[0].message.content;
+    // Add to array
+    conversationArr.push({
+      role: 'assistant',
+      content: completion
+    })
     // returned in successful response of /ask request
     return res.status(200).json({
       success: true,
