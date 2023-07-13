@@ -32,6 +32,7 @@ function renderTypewriterText(text){
   const interval = setInterval(() => {
     newSpeechBubble.textContent += text.slice(i-1, i);
     if (text.length === i) {
+      // Stops the execution of the function
       clearInterval(interval)
       newSpeechBubble.classList.remove('blinking-cursor')
     }
