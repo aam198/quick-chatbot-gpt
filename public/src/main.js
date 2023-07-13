@@ -37,7 +37,7 @@ function renderTypewriterText(text){
     }
     i++;
     chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
-  })
+  }, 50)
 }
 
 userInputForm.addEventListener('submit', async (e) => {
@@ -69,7 +69,7 @@ userInputForm.addEventListener('submit', async (e) => {
       },
       body: JSON.stringify({ prompt })
     });
-    
+
     const data = await response.json();
     console.log(data);
     renderTypewriterText(data.message);
