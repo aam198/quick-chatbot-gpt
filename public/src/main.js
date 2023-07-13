@@ -31,11 +31,13 @@ function renderTypewriterText(text){
   let i = 0;
   const interval = setInterval(() => {
     newSpeechBubble.textContent += text.slice(i-1, i);
+    // When response text is completed
     if (text.length === i) {
       // Stops the execution of the function
       clearInterval(interval)
       newSpeechBubble.classList.remove('blinking-cursor')
     }
+    // increments value by 1 to move to next character to continue typewriter effect
     i++;
     chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
   }, 50)
