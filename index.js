@@ -20,7 +20,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 const conversationArr = [
   {
-    role: 'system',
+    role: 'assistant',
     content: 'Backend You are useful assistance.' //this is the instruction
   }
 ];

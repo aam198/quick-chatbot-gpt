@@ -22,6 +22,24 @@ const scrollToBottom = () => {
   chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
 };
 
+function renderTypewriterText(text){
+  const newSpeechBubble = document.createElement('div');
+  newSpeechBubble.classList.add('speech', 'speech-ai', 'blinking-cursor');
+  chatbotConversation.appendChild(newSpeechBubble);
+
+  // render each character one by one
+  let i = 0;
+  const interval = setInterval(() => {
+    newSpeechBubble.textContent += text.slice(i-1, i);
+    if (text.length === i) {
+      clearInterval(interval)
+      newSpeechBubble.classList.remove('blinking-cursor')
+    }
+    i++;
+    chatbotConversation.scrollTop = chatbotConversation.scrollHeight;
+  })
+}
+
 userInputForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   document.getElementById("send-icon").style.transform="scale(1.2)";
@@ -54,7 +72,7 @@ userInputForm.addEventListener('submit', async (e) => {
 
     const data = await response.json();
     console.log(data);
-    addSpeechBubble('ai', data.message);
+    renderTypewriterText(data.message);
     conversationArr.push({
       role: 'assistant',
       content: data.message
